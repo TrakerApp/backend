@@ -1,0 +1,7 @@
+{
+  "name": "trakerapp-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Carlos Rodriguez <ecarlos.rodriguez@gmail.com>",
+  "license": "MIT"
+}
