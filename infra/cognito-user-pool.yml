@@ -3,6 +3,7 @@ Resources:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: ${self:service}-user-pool-${self:provider.stage}
+      MfaConfiguration: OFF
       Schema:
         - Name: email
           Required: true
@@ -18,7 +19,20 @@ Resources:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       ClientName: ${self:service}-user-pool-client-${self:provider.stage}
-      # GenerateSecret: false
-      UserPoolId: { Ref: UserPool }
-      # AccessTokenValidity: 5
-      # IdTokenValidity: 5
+      GenerateSecret: false
+      UserPoolId:
+        Ref: UserPool
+  # ApiGatewayAuthorizer:
+  #   DependsOn:
+  #     - ApiGatewayRestApi
+  #   Type: AWS::ApiGateway::Authorizer
+  #   Properties:
+  #     Name: cognito-authorizer
+  #     IdentitySource: method.request.header.Authorization
+  #     RestApiId:
+  #       Ref: ApiGatewayRestApi
+  #     Type: COGNITO_USER_POOLS
+  #     ProviderARNs:
+  #       - Fn::GetAtt: [CognitoUserPool, Arn]
+  # https://github.com/davidgf/serverless-cognito/blob/master/serverless.yml
+  # https://medium.com/@Da_vidgf/using-cognito-for-users-management-in-your-serverless-application-1695fec9e225
