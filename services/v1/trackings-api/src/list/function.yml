@@ -1,0 +1,10 @@
+trackings-list-v1:
+  role: TrakerLambdaTrackingsReaderRole
+  handler: services/v1/trackings-api/src/list/index.handler
+  package:
+    patterns:
+      - "services/v1/trackings-api/src/list/index.js"
+  events:
+    - httpApi:
+        method: GET
+        path: /api/v1/trackings

@@ -1,9 +1,9 @@
-trackings-create:
+trackings-create-v1:
   role: TrakerLambdaTrackingsWritterRole
-  handler: src/create/index.handler
+  handler: services/v1/trackings-api/src/create/index.handler
   package:
     patterns:
-      - "src/create/index.js"
+      - "services/v1/trackings-api/src/create/index.js"
   events:
     - httpApi:
         method: POST

@@ -1,7 +1,0 @@
-service: ${file(../../serverless.common.yml):service}
-frameworkVersion: ${file(../../serverless.common.yml):frameworkVersion}
-provider: ${file(../../serverless.common.yml):provider}
-package: ${file(../../serverless.common.yml):package}
-
-functions:
-  - ${file(src/create/function.yml)}

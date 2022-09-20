@@ -28,7 +28,7 @@ resources:
   - ${file(./infra/traker-lambda-trackings-reader-role.yml)}
   - ${file(./infra/traker-lambda-trackings-writter-role.yml)}
 
-# functions:
-#   # TRACKINGS API
-#   - ${file(services/v1/trackings-api/src/create/function.yml)}
-#   - ${file(services/v1/trackings-api/src/get/function.yml)}
+functions:
+  # TRACKINGS API
+  - ${file(services/v1/trackings-api/src/create/function.yml)}
+  - ${file(services/v1/trackings-api/src/list/function.yml)}
