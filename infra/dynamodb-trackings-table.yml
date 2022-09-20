@@ -1,8 +1,9 @@
 Resources:
   TrackingsTable:
     Type: AWS::DynamoDB::Table
+    # DeletionPolicy: Retain # TODO: FOR PROD UNCOMMENT ME
     Properties:
-      TableName: ${self:service}-trackings-${self:provider.stage}
+      TableName: ${self:service}-${self:provider.stage}-trackings
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S

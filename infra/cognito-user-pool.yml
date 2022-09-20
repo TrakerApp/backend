@@ -1,8 +1,9 @@
 Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
+    # DeletionPolicy: Retain # TODO: FOR PROD UNCOMMENT ME
     Properties:
-      UserPoolName: ${self:service}-user-pool-${self:provider.stage}
+      UserPoolName: ${self:service}-${self:provider.stage}-user-pool
       MfaConfiguration: OFF
       Schema:
         - Name: email
@@ -18,7 +19,7 @@ Resources:
   UserClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: ${self:service}-user-pool-client-${self:provider.stage}
+      ClientName: ${self:service}-${self:provider.stage}-user-pool-client
       GenerateSecret: false
       UserPoolId:
         Ref: UserPool

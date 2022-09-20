@@ -4,6 +4,7 @@ trackings-create-v1:
   package:
     patterns:
       - "services/v1/trackings-api/src/create/index.js"
+      - "services/v1/trackings-api/src/create/node_modules/nanoid/**"
   events:
     - httpApi:
         method: POST
