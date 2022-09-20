@@ -1,0 +1,40 @@
+Resources:
+  TrakerLambdaTrackingsReaderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:provider.environment.TRACKINGS_TABLE_READER_ROLE}
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: ${self:provider.environment.TRACKINGS_TABLE_READER_ROLE}-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                Resource:
+                  Fn::GetAtt: [TrackingsTable, Arn]
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                Resource:
+                  Fn::GetAtt: [TrackingsTable, Arn]
+              - Effect: Allow
+                Action:
+                  - dynamodb:Scan
+                Resource:
+                  Fn::GetAtt: [TrackingsTable, Arn]

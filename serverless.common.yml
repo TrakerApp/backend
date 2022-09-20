@@ -1,0 +1,28 @@
+service: trakerapp
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  profile: trakerapp
+  region: us-east-1
+  architecture: arm64
+  versionFunctions: false
+  environment:
+    TRACKINGS_TABLE_NAME: ${self:service}-trackings-${self:provider.stage}
+    TRACKINGS_TABLE_WRITTER_ROLE: ${self:service}-trackings-writter-${self:provider.stage}
+    TRACKINGS_TABLE_READER_ROLE: ${self:service}-trackings-reader-${self:provider.stage}
+  tags:
+    Project: TrakerApp
+    Environment: ${self:provider.stage}
+  stackTags:
+    Project: TrakerApp
+    Environment: ${self:provider.stage}
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - "!*/**"
