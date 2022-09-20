@@ -16,6 +16,8 @@ provider:
   stackTags:
     Project: TrakerApp
     Environment: ${self:provider.stage}
+  httpApi:
+    cors: true
 
 package:
   individually: true
@@ -27,6 +29,7 @@ resources:
   - ${file(./infra/dynamodb-trackings-table.yml)}
   - ${file(./infra/traker-lambda-trackings-reader-role.yml)}
   - ${file(./infra/traker-lambda-trackings-writter-role.yml)}
+  - ${file(./infra/cognito-user-pool.yml)}
 
 functions:
   # TRACKINGS API

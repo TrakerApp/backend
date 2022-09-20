@@ -2,7 +2,7 @@ Resources:
   TrakerLambdaTrackingsReaderRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ${self:service}-trackings-reader-${self:provider.stage}
+      RoleName: ${self:service}-trackings-reader-role-${self:provider.stage}
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -13,7 +13,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: ${self:service}-trackings-reader-${self:provider.stage}-policy
+        - PolicyName: ${self:service}-trackings-reader-role-policy-${self:provider.stage}
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
