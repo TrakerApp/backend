@@ -4,7 +4,10 @@ trackings-create-v1:
   package:
     patterns:
       - "services/v1/trackings-api/src/create/index.js"
-      - "services/v1/trackings-api/src/create/node_modules/nanoid/**"
+      - "node_modules/nanoid/**"
+      - "node_modules/@aws-sdk/client-dynamodb/**"
+      - "package.json"
+      - "yarn.lock"
   events:
     - httpApi:
         method: POST

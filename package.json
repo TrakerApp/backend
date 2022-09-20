@@ -1,7 +1,12 @@
 {
   "name": "trakerapp-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "author": "Carlos Rodriguez <ecarlos.rodriguez@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.172.0",
+    "nanoid": "^4.0.0"
+  }
 }
