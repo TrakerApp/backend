@@ -1,0 +1,17 @@
+trackings-list:
+  role:
+    arn:
+      Fn::Join:
+        - ""
+        - - "arn:aws:iam::"
+          - Ref: AWS::AccountId
+          - ":role/"
+          - ${self:provider.environment.TRACKINGS_TABLE_WRITTER_ROLE}
+  handler: src/list/index.handler
+  package:
+    patterns:
+      - "src/list/index.js"
+  events:
+    - httpApi:
+        method: GET
+        path: /api/v1/trackings

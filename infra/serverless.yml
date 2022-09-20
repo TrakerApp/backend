@@ -1,8 +1,0 @@
-service: ${file(../serverless.common.yml):service}
-frameworkVersion: ${file(../serverless.common.yml):frameworkVersion}
-provider: ${file(../serverless.common.yml):provider}
-
-resources:
-  - ${file(./dynamodb-trackings-table.yml)}
-  - ${file(./traker-lambda-trackings-reader-role.yml)}
-  - ${file(./traker-lambda-trackings-writter-role.yml)}

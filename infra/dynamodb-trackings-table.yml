@@ -2,7 +2,7 @@ Resources:
   TrackingsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:provider.environment.TRACKINGS_TABLE_NAME}
+      TableName: ${self:service}-trackings-${self:provider.stage}
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S

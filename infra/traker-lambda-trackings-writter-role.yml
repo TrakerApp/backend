@@ -2,7 +2,7 @@ Resources:
   TrakerLambdaTrackingsWritterRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ${self:provider.environment.TRACKINGS_TABLE_WRITTER_ROLE}
+      RoleName: ${self:service}-trackings-writter-${self:provider.stage}
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -13,7 +13,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: ${self:provider.environment.TRACKINGS_TABLE_WRITTER_ROLE}-policy
+        - PolicyName: ${self:service}-trackings-writter-${self:provider.stage}-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:

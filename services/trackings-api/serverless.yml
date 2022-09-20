@@ -4,13 +4,4 @@ provider: ${file(../../serverless.common.yml):provider}
 package: ${file(../../serverless.common.yml):package}
 
 functions:
-  trackings-create:
-    role: ${self:provider.environment.TRACKINGS_TABLE_WRITTER_ROLE}
-    handler: src/create/index.handler
-    package:
-      patterns:
-        - "src/create/index.handler.js"
-    events:
-      - httpApi:
-          method: POST
-          path: /api/v1/trackings
+  - ${file(src/create/function.yml)}

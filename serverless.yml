@@ -10,10 +10,6 @@ provider:
   region: us-east-1
   architecture: arm64
   versionFunctions: false
-  environment:
-    TRACKINGS_TABLE_NAME: ${self:service}-trackings-${self:provider.stage}
-    TRACKINGS_TABLE_WRITTER_ROLE: ${self:service}-trackings-writter-${self:provider.stage}
-    TRACKINGS_TABLE_READER_ROLE: ${self:service}-trackings-reader-${self:provider.stage}
   tags:
     Project: TrakerApp
     Environment: ${self:provider.stage}
@@ -26,3 +22,13 @@ package:
   excludeDevDependencies: true
   patterns:
     - "!*/**"
+
+resources:
+  - ${file(./infra/dynamodb-trackings-table.yml)}
+  - ${file(./infra/traker-lambda-trackings-reader-role.yml)}
+  - ${file(./infra/traker-lambda-trackings-writter-role.yml)}
+
+# functions:
+#   # TRACKINGS API
+#   - ${file(services/v1/trackings-api/src/create/function.yml)}
+#   - ${file(services/v1/trackings-api/src/get/function.yml)}

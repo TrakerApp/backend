@@ -1,0 +1,10 @@
+trackings-create:
+  role: TrakerLambdaTrackingsWritterRole
+  handler: src/create/index.handler
+  package:
+    patterns:
+      - "src/create/index.js"
+  events:
+    - httpApi:
+        method: POST
+        path: /api/v1/trackings
