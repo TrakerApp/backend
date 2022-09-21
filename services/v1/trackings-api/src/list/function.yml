@@ -1,9 +1,6 @@
 trackings-list-v1:
-  role: TrakerLambdaTrackingsReaderRole
+  role: TrakerLambdaDynamodbReaderRole
   handler: services/v1/trackings-api/src/list/index.handler
-  package:
-    patterns:
-      - "services/v1/trackings-api/src/list/index.js"
   events:
     - httpApi:
         method: GET

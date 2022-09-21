@@ -1,13 +1,6 @@
 trackings-create-v1:
-  role: TrakerLambdaTrackingsWritterRole
+  role: TrakerLambdaDynamodbWritterRole
   handler: services/v1/trackings-api/src/create/index.handler
-  package:
-    patterns:
-      - "services/v1/trackings-api/src/create/index.js"
-      - "node_modules/nanoid/**"
-      - "node_modules/@aws-sdk/client-dynamodb/**"
-      - "package.json"
-      - "yarn.lock"
   events:
     - httpApi:
         method: POST

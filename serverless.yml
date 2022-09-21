@@ -14,21 +14,32 @@ provider:
     Project: TrakerApp
     Environment: ${self:provider.stage}
   stackTags:
-    Project: TrakerApp
-    Environment: ${self:provider.stage}
+    Project: ${self:provider.tags.Project}
+    Environment: ${self:provider.tags.Environment}
+  environment:
+    TRACKINGS_TABLE: ${self:service}-${self:provider.stage}-trackings
+    OCCURRENCES_TABLE: ${self:service}-${self:provider.stage}-occurrences
   httpApi:
     cors: true
 
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.cjs' # Name of webpack configuration file
+    # includeModules: false
+    packager: 'yarn' # Packager that will be used to package your external modules
+    excludeFiles: services/**/*.test.js # Provide a glob for files to ignore
+
+plugins:
+  - serverless-webpack
+
 package:
   individually: true
-  excludeDevDependencies: true
-  patterns:
-    - "!*/**"
 
 resources:
   - ${file(./infra/dynamodb-trackings-table.yml)}
-  - ${file(./infra/traker-lambda-trackings-reader-role.yml)}
-  - ${file(./infra/traker-lambda-trackings-writter-role.yml)}
+  - ${file(./infra/dynamodb-occurrences-table.yml)}
+  - ${file(./infra/traker-lambda-dynamodb-reader-role.yml)}
+  - ${file(./infra/traker-lambda-dynamodb-writter-role.yml)}
   - ${file(./infra/cognito-user-pool.yml)}
 
 functions:

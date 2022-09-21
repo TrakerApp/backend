@@ -1,8 +1,8 @@
 Resources:
-  TrakerLambdaTrackingsReaderRole:
+  TrakerLambdaDynamodbWritterRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ${self:service}-${self:provider.stage}-trackings-reader-role
+      RoleName: ${self:service}-d-${self:provider.stage}ynamodb-writter-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -13,7 +13,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: ${self:service}-${self:provider.stage}-trackings-reader-role-policy
+        - PolicyName: ${self:service}-${self:provider.stage}-dynamodb-writter-role-policy-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -25,16 +25,21 @@ Resources:
                 Resource: "*"
               - Effect: Allow
                 Action:
-                  - dynamodb:GetItem
+                  - dynamodb:PutItem
                 Resource:
                   Fn::GetAtt: [TrackingsTable, Arn]
               - Effect: Allow
                 Action:
-                  - dynamodb:Query
+                  - dynamodb:PutItem
+                Resource:
+                  Fn::GetAtt: [OccurrencesTable, Arn]
+              - Effect: Allow
+                Action:
+                  - dynamodb:DeleteItem
                 Resource:
                   Fn::GetAtt: [TrackingsTable, Arn]
               - Effect: Allow
                 Action:
-                  - dynamodb:Scan
+                  - dynamodb:DeleteItem
                 Resource:
-                  Fn::GetAtt: [TrackingsTable, Arn]
+                  Fn::GetAtt: [OccurrencesTable, Arn]

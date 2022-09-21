@@ -3,20 +3,38 @@ Resources:
     Type: AWS::DynamoDB::Table
     # DeletionPolicy: Retain # TODO: FOR PROD UNCOMMENT ME
     Properties:
-      TableName: ${self:service}-${self:provider.stage}-trackings
+      TableName: ${self:provider.environment.TRACKINGS_TABLE}
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: userId # Primary key
           AttributeType: S
-        - AttributeName: userId
+        - AttributeName: name # Sort key, to avoid duplicates
           AttributeType: S
+        - AttributeName: lastOccurenceAt # last occurrence createdAt, showing on trackings list
+          AttributeType: N
+        # - AttributeName: trackingId # NOT INDEXED! JUST FOR FETCHING OCCURRENCES
+        #   AttributeType: S
+        # - AttributeName: createdAt # Just for reference, not required/used
+        #   AttributeType: N
       KeySchema:
-        - AttributeName: id
+        -
+          AttributeName: userId
           KeyType: HASH
-      BillingMode: PAY_PER_REQUEST
-      GlobalSecondaryIndexes:
-        - IndexName: userId-index
+        -
+          AttributeName: name
+          KeyType: RANGE
+      LocalSecondaryIndexes:
+        -
+          IndexName: "lastOccurenceAtIndex" # Basically for the query on homepage
           KeySchema:
-            - AttributeName: userId
+            -
+              AttributeName: userId
               KeyType: HASH
+            -
+              AttributeName: lastOccurenceAt
+              KeyType: RANGE
           Projection:
-            ProjectionType: ALL
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - trackingId
+              - name
+      BillingMode: PAY_PER_REQUEST
