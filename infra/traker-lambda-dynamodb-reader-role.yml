@@ -2,7 +2,7 @@ Resources:
   TrakerLambdaDynamodbReaderRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ${self:service}-${self:provider.stage}-dynamodb-reader-role
+      RoleName: ${self:provider.environment.LAMBDA_DYNAMODB_READER_ROLE_NAME}
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -13,7 +13,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: ${self:service}-${self:provider.stage}-dynamodb-reader-role-policy
+        - PolicyName: ${self:provider.environment.LAMBDA_DYNAMODB_READER_ROLE_NAME}-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
