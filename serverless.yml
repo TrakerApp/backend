@@ -24,14 +24,14 @@ provider:
     Project: ${self:provider.tags.Project}
     Environment: ${self:provider.tags.Environment}
   environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
     TRACKINGS_TABLE: trakerapp-infra-${self:provider.stage}-trackings
     OCCURRENCES_TABLE: trakerapp-infra-${self:provider.stage}-occurrences
     LAMBDA_DYNAMODB_READER_ROLE_NAME: trakerapp-infra-${self:provider.stage}-dynamodb-reader-role
-    LAMBDA_DYNAMODB_READER_ROLE_NAME_ARN:
-      Fn::Sub: "arn:aws:iam::${AWS::AccountId}:role/${self:provider.environment.LAMBDA_DYNAMODB_READER_ROLE_NAME}"
+    LAMBDA_DYNAMODB_READER_ROLE_NAME_ARN: "arn:aws:iam::${aws:accountId}:role/${self:provider.environment.LAMBDA_DYNAMODB_READER_ROLE_NAME}"
     LAMBDA_DYNAMODB_WRITTER_ROLE_NAME: trakerapp-infra-${self:provider.stage}-dynamodb-writter-role
-    LAMBDA_DYNAMODB_WRITTER_ROLE_NAME_ARN:
-      Fn::Sub: "arn:aws:iam::${AWS::AccountId}:role/${self:provider.environment.LAMBDA_DYNAMODB_WRITTER_ROLE_NAME}"
+    LAMBDA_DYNAMODB_WRITTER_ROLE_NAME_ARN: "arn:aws:iam::${aws:accountId}:role/${self:provider.environment.LAMBDA_DYNAMODB_WRITTER_ROLE_NAME}"
   httpApi:
     cors: true
 

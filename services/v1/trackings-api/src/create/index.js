@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
-import { DynamoDBClient, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
-const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
+const dynamodbClient = new DynamoDBClient({ region: process.env.REGION });
 
 export const handler = async (event) => {
 	const userId = "asdf1234"; // temporal until we have cognito implemented in app
@@ -26,20 +26,17 @@ export const handler = async (event) => {
 	try {
 		await dynamodbClient.send(new PutItemCommand(params))
 
-		return {
-			statusCode: 201,
-			body: JSON.stringify({
-				trackingId
-			})
-		}
+		return { statusCode: 201 }
 	} catch (error) {
-		console.error("ERROR:", error)
+		if (error.name === 'ConditionalCheckFailedException') {
+			return { statusCode: 409, body: JSON.stringify({ error: 'Tracking already exists' }) }
+		}
 
 		return {
 			statusCode: 500,
 			body: JSON.stringify({
 				message: 'error',
-				input: error,
+				error: process.env.STAGE === 'dev' ? error : 'Internal Server Error',
 			}),
 		}
 	}
