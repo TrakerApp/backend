@@ -26,20 +26,13 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:UpdateItem
                 Resource:
                   Fn::GetAtt: [TrackingsTable, Arn]
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
-                Resource:
-                  Fn::GetAtt: [OccurrencesTable, Arn]
-              - Effect: Allow
-                Action:
-                  - dynamodb:DeleteItem
-                Resource:
-                  Fn::GetAtt: [TrackingsTable, Arn]
-              - Effect: Allow
-                Action:
                   - dynamodb:DeleteItem
                 Resource:
                   Fn::GetAtt: [OccurrencesTable, Arn]

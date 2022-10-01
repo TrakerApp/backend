@@ -26,30 +26,14 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:GetItem
-                Resource:
-                  Fn::GetAtt: [TrackingsTable, Arn]
-              - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                Resource:
-                  Fn::GetAtt: [OccurrencesTable, Arn]
-              - Effect: Allow
-                Action:
                   - dynamodb:Query
-                Resource:
-                  Fn::GetAtt: [TrackingsTable, Arn]
-              - Effect: Allow
-                Action:
-                  - dynamodb:Query
-                Resource:
-                  Fn::GetAtt: [OccurrencesTable, Arn]
-              - Effect: Allow
-                Action:
                   - dynamodb:Scan
                 Resource:
                   Fn::GetAtt: [TrackingsTable, Arn]
               - Effect: Allow
                 Action:
+                  - dynamodb:GetItem
+                  - dynamodb:Query
                   - dynamodb:Scan
                 Resource:
                   Fn::GetAtt: [OccurrencesTable, Arn]
