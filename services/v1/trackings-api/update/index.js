@@ -1,16 +1,19 @@
-import Tracking from "../../../../../models/tracking.model.js"
+import Tracking from "../../../../models/tracking.model.js"
 
 export const handler = async (event) => {
 	const userId = "asdf1234"; // temporal until we have cognito implemented in app
 	const { name } = JSON.parse(event.body);
-	
+	const { trackingId } = event.pathParameters;
+
+	if (!trackingId || trackingId === '' || !name || name === '') {
+		return { statusCode: 400, body: JSON.stringify({ error: 'Required attributes: trackingId, name' }) }
+	}
+
 	try {
-		const tracking = await Tracking.create({ userId, name });
+		await Tracking.update({ userId, trackingId }, { name });
 
-		return { statusCode: 201, body: JSON.stringify({ tracking_id: tracking.trackingId }) }
+		return { statusCode: 201 }
 	} catch (error) {
-		console.error("Error on trackings-create-v1:", error)
-
 		const msg = error.toString()
 		if (msg.match(/duplicate.key/) && msg.match(/name_unique/)) {
 			return { statusCode: 409, body: JSON.stringify({ error: 'Tracking already exists' }) }

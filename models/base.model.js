@@ -7,7 +7,6 @@ export const DEFAULT_IDLE_TIME_FOR_DISCONNECT = 10 // seconds
 // test is only used locally for running tests, dev/prod/staging/etc are all on lambda
 export const DATABASE_URL = process.env.TRAKER_ENV === 'test' ? process.env.TEST_DATABASE_URL : process.env.DATABASE_URL
 
-console.log("DATABASE_URL is", DATABASE_URL)
 // we can declare thousands of these if we want, they only get executed when called and then will connection will die after 10 seconds
 const sql = postgres(DATABASE_URL, {
 	// database: DATABASE_NAME,

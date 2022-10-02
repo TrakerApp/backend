@@ -43,6 +43,6 @@ package:
 
 functions:
   # TRACKINGS API
-  - ${file(services/v1/trackings-api/src/create/function.yml)}
-  - ${file(services/v1/trackings-api/src/update/function.yml)}
-  - ${file(services/v1/trackings-api/src/list/function.yml)}
+  - ${file(services/v1/trackings-api/create/function.yml)}
+  - ${file(services/v1/trackings-api/update/function.yml)}
+  - ${file(services/v1/trackings-api/list/function.yml)}

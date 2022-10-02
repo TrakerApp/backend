@@ -19,8 +19,9 @@ export default class Tracking extends Base {
 		this.lastOccurrenceAt = lastOccurrenceAt
 	}
 
-	static initFromDb({ tracking_id, name, last_occurrence_at }) {
+	static initFromDb({ user_id, tracking_id, name, last_occurrence_at }) {
 		return new Tracking({
+			userId: user_id,
 			trackingId: tracking_id,
 			name,
 			lastOccurrenceAt: last_occurrence_at
@@ -28,8 +29,13 @@ export default class Tracking extends Base {
 	}
 
 	static async create({ userId, name }) {
-		const trackingId = await this.sql`INSERT INTO ${this.sql(TABLE_NAME)} (user_id, name) VALUES (${userId}, ${name}) RETURNING tracking_id`
-		return new Tracking({ userId, trackingId, name })
+		const result = await this.sql`INSERT INTO ${this.sql(TABLE_NAME)} (user_id, name) VALUES (${userId}, ${name}) RETURNING tracking_id`
+		return new Tracking({ userId, trackingId: result[0].tracking_id, name })
+	}
+
+	static async findById(trackingId) {
+		const [tracking] = await this.sql`SELECT * FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId}`
+		return this.initFromDb(tracking)
 	}
 
 	static async find({ userId, trackingId }) {
