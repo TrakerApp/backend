@@ -1,10 +1,9 @@
+useDotenv: true
+
 service: trakerapp-infra
 provider: ${file(../serverless.yml):provider}
 frameworkVersion: ${file(../serverless.yml):frameworkVersion}
 
 resources:
-  - ${file(./dynamodb-trackings-table.yml)}
-  - ${file(./dynamodb-occurrences-table.yml)}
-  - ${file(./traker-lambda-dynamodb-reader-role.yml)}
-  - ${file(./traker-lambda-dynamodb-writter-role.yml)}
+  - ${file(./traker-lambda-execution-role.yml)}
   - ${file(./cognito-user-pool.yml)}

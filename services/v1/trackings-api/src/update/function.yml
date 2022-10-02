@@ -1,5 +1,5 @@
 trackings-update-v1:
-  role: ${self:provider.environment.LAMBDA_DYNAMODB_WRITTER_ROLE_NAME_ARN}
+  role: ${self:provider.environment.LAMBDA_EXECUTION_ROLE_NAME_ARN}
   handler: services/v1/trackings-api/src/update/index.handler
   events:
     - httpApi:
