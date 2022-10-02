@@ -43,9 +43,21 @@ export default class Tracking extends Base {
 		return this.initFromDb(tracking)
 	}
 
-	static async findAll({ userId }) {
-		const trackings = await this.sql`SELECT tracking_id, name, last_occurrence_at FROM ${this.sql(TABLE_NAME)} WHERE user_id = ${userId}`
-		return trackings.map(tracking => this.initFromDb(tracking))
+	static async findAll({ userId, page = 1, per_page = 10 }) {
+		const total = await this.sql`SELECT COUNT(*) FROM ${this.sql(TABLE_NAME)} WHERE user_id = ${userId}`
+
+		const trackings = await this.sql`
+			SELECT tracking_id, name, last_occurrence_at
+			FROM ${this.sql(TABLE_NAME)}
+			WHERE user_id = ${userId}
+			ORDER BY last_occurrence_at DESC, name ASC
+			LIMIT ${per_page} OFFSET ${(page-1) * per_page}
+		`
+
+		const response = trackings.map(tracking => this.initFromDb({ userId, ...tracking }))
+		response.totalHits = parseInt(total[0].count)
+
+		return response
 	}
 
 	static async update({ userId, trackingId }, { name }) {
