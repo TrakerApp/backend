@@ -9,6 +9,8 @@ export const handler = async (event) => {
 
 		return { statusCode: 201, body: JSON.stringify({ tracking_id: tracking.trackingId }) }
 	} catch (error) {
+		console.error("Error on trackings-create-v1:", error)
+
 		const msg = error.toString()
 		if (msg.match(/duplicate.key/) && msg.match(/name_unique/)) {
 			return { statusCode: 409, body: JSON.stringify({ error: 'Tracking already exists' }) }

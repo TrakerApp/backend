@@ -29,6 +29,7 @@ provider:
     STAGE: ${self:provider.stage}
     TRAKER_ENV: ${self:provider.stage}
     REGION: ${self:provider.region}
+    DATABASE_URL: ${env:DATABASE_URL}
     LAMBDA_EXECUTION_ROLE_NAME: trakerapp-infra-${self:provider.stage}-execution-role
     LAMBDA_EXECUTION_ROLE_NAME_ARN: "arn:aws:iam::${aws:accountId}:role/${self:provider.environment.LAMBDA_EXECUTION_ROLE_NAME}"
   httpApi:
