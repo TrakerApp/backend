@@ -53,5 +53,9 @@ describe('trackings-create-v1', function () {
 
 		response = await handler({ body: JSON.stringify({ userId: "12345", name: "test-tracking" }) })
 		expect(response.statusCode).to.equal(201)
+
+		expect(await Tracking.findAll({ userId: 'zzz' })).to.have.lengthOf(0)
+		expect(await Tracking.findAll({ userId: '1234' })).to.have.lengthOf(1)
+		expect(await Tracking.findAll({ userId: '12345' })).to.have.lengthOf(1)
 	})
 })
