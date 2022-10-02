@@ -1,5 +1,5 @@
 import Base from "../models/base.model.js"
-import { TABLE_NAME as TrackingTableName } from "../models/trackings.model.js"
+import { TABLE_NAME as TrackingTableName } from "../models/tracking.model.js"
 import { TABLE_NAME as OccurrenceTableName } from "../models/occurrence.model.js"
 
 const up = async () => {

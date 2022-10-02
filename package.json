@@ -10,7 +10,13 @@
     "postgres": "^3.3.0"
   },
   "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
     "serverless-webpack": "^5.9.1",
     "webpack": "^5.74.0"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive test --exit",
+    "testf": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive --exit"
   }
 }

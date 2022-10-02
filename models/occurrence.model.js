@@ -8,6 +8,8 @@ export const TABLE_NAME = 'occurrence'
 // created_at: timestamp
 
 export default class Occurrence extends Base {
+	static tableName() { return TABLE_NAME }
+
 	constructor({ trackingId, occurrenceId, createdAt }) {
 		super()
 		this.trackingId = trackingId
