@@ -6,8 +6,8 @@
   "author": "Carlos Rodriguez <ecarlos.rodriguez@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.172.0",
-    "nanoid": "^4.0.0"
+    "dotenv": "^16.0.3",
+    "postgres": "^3.3.0"
   },
   "devDependencies": {
     "serverless-webpack": "^5.9.1",

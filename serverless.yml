@@ -1,3 +1,5 @@
+useDotenv: true
+
 service: trakerapp
 
 frameworkVersion: '3'
@@ -25,7 +27,9 @@ provider:
     Environment: ${self:provider.tags.Environment}
   environment:
     STAGE: ${self:provider.stage}
+    TRAKER_ENV: ${self:provider.stage}
     REGION: ${self:provider.region}
+    DATABASE_URL: ${env:DATABASE_URL}
     TRACKINGS_TABLE: trakerapp-infra-${self:provider.stage}-trackings
     OCCURRENCES_TABLE: trakerapp-infra-${self:provider.stage}-occurrences
     LAMBDA_DYNAMODB_READER_ROLE_NAME: trakerapp-infra-${self:provider.stage}-dynamodb-reader-role
@@ -44,4 +48,5 @@ package:
 functions:
   # TRACKINGS API
   - ${file(services/v1/trackings-api/src/create/function.yml)}
+  - ${file(services/v1/trackings-api/src/update/function.yml)}
   - ${file(services/v1/trackings-api/src/list/function.yml)}

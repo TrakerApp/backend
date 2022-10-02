@@ -7,12 +7,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: userId # Primary key
           AttributeType: S
+        - AttributeName: trackingId # NOT INDEXED! JUST FOR FETCHING OCCURRENCES
+          AttributeType: S
         - AttributeName: name # Sort key, to avoid duplicates
           AttributeType: S
         - AttributeName: lastOccurenceAt # last occurrence createdAt, showing on trackings list
           AttributeType: N
-        # - AttributeName: trackingId # NOT INDEXED! JUST FOR FETCHING OCCURRENCES
-        #   AttributeType: S
         # - AttributeName: createdAt # Just for reference, not required/used
         #   AttributeType: N
       KeySchema:
@@ -20,7 +20,7 @@ Resources:
           AttributeName: userId
           KeyType: HASH
         -
-          AttributeName: name
+          AttributeName: trackingId
           KeyType: RANGE
       LocalSecondaryIndexes:
         -
@@ -37,4 +37,15 @@ Resources:
             NonKeyAttributes:
               - trackingId
               - name
+        -
+          IndexName: "nameIndex" # Basically for the query on homepage
+          KeySchema:
+            -
+              AttributeName: userId
+              KeyType: HASH
+            -
+              AttributeName: name
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
       BillingMode: PAY_PER_REQUEST
