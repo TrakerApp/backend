@@ -31,7 +31,7 @@ export default class Occurrence extends Base {
 	}
 
 	static async findAllForTracking({ trackingId }) {
-		const occurrences = await this.sql`SELECT occurrenceId, created_at FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId}`
+		const occurrences = await this.sql`SELECT occurrence_id, created_at FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId}`
 		return occurrences.map(occurrence => this.initFromDb({ ...occurrence, tracking_id: trackingId }))
 	}
 

@@ -1,4 +1,5 @@
 import Base from "./base.model.js"
+import Occurrence from "./occurrence.model.js"
 
 export const TABLE_NAME = 'tracking'
 
@@ -33,7 +34,9 @@ export default class Tracking extends Base {
 		return new Tracking({ userId, trackingId: result[0].tracking_id, name })
 	}
 
+	// ONLY FOR TESTS
 	static async findById(trackingId) {
+		if (!process.env.NODE_ENV === 'test') { throw "model.findById is Only for test environment" }
 		const [tracking] = await this.sql`SELECT * FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId}`
 		return this.initFromDb(tracking)
 	}
@@ -43,7 +46,12 @@ export default class Tracking extends Base {
 		return this.initFromDb(tracking)
 	}
 
-	static async findAll({ userId, page = 1, per_page = 10 }) {
+	static async exists({ userId, trackingId }) {
+		const [tracking] = await this.sql`SELECT 1 FROM ${this.sql(TABLE_NAME)} WHERE user_id = ${userId} AND tracking_id = ${trackingId}`
+		return !!tracking
+	}
+
+	static async findAll({ userId, page = 1, perPage = 10 }) {
 		const total = await this.sql`SELECT COUNT(*) FROM ${this.sql(TABLE_NAME)} WHERE user_id = ${userId}`
 
 		const trackings = await this.sql`
@@ -51,7 +59,7 @@ export default class Tracking extends Base {
 			FROM ${this.sql(TABLE_NAME)}
 			WHERE user_id = ${userId}
 			ORDER BY last_occurrence_at DESC, name ASC
-			LIMIT ${per_page} OFFSET ${(page-1) * per_page}
+			LIMIT ${perPage} OFFSET ${(page-1) * perPage}
 		`
 
 		const response = trackings.map(tracking => this.initFromDb({ userId, ...tracking }))
@@ -66,5 +74,19 @@ export default class Tracking extends Base {
 
 	static async delete({ userId, trackingId }) {
 		return await this.sql`DELETE FROM ${this.sql(TABLE_NAME)} WHERE user_id = ${userId} AND tracking_id = ${trackingId}`
+	}
+
+	// NOTE: THIS METHOD ASSUMES THAT TRACKINGID IS VALID AND EXISTS
+	// VALIDATE ON CONTROLLER/ACTION BEFORE USING
+	static async track({ userId, trackingId }) {
+		const lastOccurrenceAt = await this.sql.begin(async sql => {
+			const [{ created_at }] = await sql`INSERT INTO ${sql(Occurrence.tableName())} (tracking_id) VALUES (${trackingId}) returning created_at`
+			console.log("here in track setting last_occurrence_at to", created_at)
+			const [{ last_occurrence_at }] = await sql`UPDATE ${sql(TABLE_NAME)} SET last_occurrence_at = ${created_at} WHERE user_id = ${userId} AND tracking_id = ${trackingId} returning last_occurrence_at`
+			console.log("and the date stored in sql:", last_occurrence_at)
+			return created_at
+		})
+
+		return lastOccurrenceAt
 	}
 }

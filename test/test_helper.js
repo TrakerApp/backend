@@ -6,7 +6,7 @@ const { expect } = chai
 // Model setup
 import Tracking from "../models/tracking.model.js"
 import Occurrence from "../models/occurrence.model.js"
-const ALL_MODELS = [Tracking, Occurrence]
+const ALL_MODELS = [Occurrence, Tracking]
 
 // ACTUAL HELPERS
 const cleanAllModels = () => {
@@ -17,8 +17,14 @@ const cleanAllModels = () => {
 	})
 }
 
+const sleep = (ms) => {
+	return new Promise((resolve) => {
+		setTimeout(resolve, ms)
+	})
+}
 
 export {
 	cleanAllModels,
-	chai, expect
+	sleep,
+	chai, expect,
 }

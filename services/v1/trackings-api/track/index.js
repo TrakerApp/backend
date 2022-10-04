@@ -3,19 +3,26 @@ import { isBlank } from "../../../../libs/validation.js"
 
 export const handler = async (event) => {
 	// userId is temporal until we have cognito implemented in app
-	const { userId, name } = JSON.parse(event.body);
+	const { userId } = JSON.parse(event.body);
+	const { trackingId } = event.pathParameters;
 
-	if (isBlank(userId) || isBlank(name)) {
-		return { statusCode: 400, body: JSON.stringify({ error: 'required attributes: userId, name' }) }
+	if (isBlank(userId) || isBlank(trackingId)) {
+		return { statusCode: 400, body: JSON.stringify({ error: 'required attributes: userId, trackingId' }) }
 	}
 
 	try {
-		const tracking = await Tracking.create({ userId, name });
+		const tracking = await Tracking.exists({ userId, trackingId });
 
-		return { statusCode: 201, body: JSON.stringify({ trackingId: tracking.trackingId }) }
+		if (!tracking) {
+			return { statusCode: 404, body: JSON.stringify({ error: 'tracking not found' }) }
+		}
+
+		const lastOccurrenceAt = await Tracking.track({ userId, trackingId });
+
+		return { statusCode: 201, body: JSON.stringify({ lastOccurrenceAt }) }
 	} catch (error) {
-		if (process.env.TRAKER_ENV !== 'test') {
-			console.error("Error on trackings-create-v1:", error)
+		if (process.env.TRAKER_ENV !== 'tesst') {
+			console.error("Error on trackings-track-v1:", error)
 		}
 
 		const msg = error.toString()

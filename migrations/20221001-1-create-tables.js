@@ -4,7 +4,7 @@ import { TABLE_NAME as OccurrenceTableName } from "../models/occurrence.model.js
 
 const up = async () => {
 	await Base.sql`
-		CREATE TABLE ${Base.sql(TrackingTableName)} (
+		CREATE TABLE IF NOT EXISTS ${Base.sql(TrackingTableName)} (
 			user_id STRING NOT NULL,
 			tracking_id UUID NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
 			name STRING NOT NULL,
