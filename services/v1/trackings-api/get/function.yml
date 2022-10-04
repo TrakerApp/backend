@@ -1,0 +1,7 @@
+trackings-get-v1:
+  role: ${self:provider.environment.LAMBDA_EXECUTION_ROLE_NAME_ARN}
+  handler: services/v1/trackings-api/get/index.handler
+  events:
+    - httpApi:
+        method: GET
+        path: /api/v1/trackings/{trackingId}
