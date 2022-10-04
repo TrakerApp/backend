@@ -1,4 +1,4 @@
-import Base from "./base.model.js"
+import BaseModel from "./base.model.js"
 
 export const TABLE_NAME = 'occurrence'
 
@@ -7,7 +7,7 @@ export const TABLE_NAME = 'occurrence'
 // tracking_id: foreign key
 // created_at: timestamp
 
-export default class Occurrence extends Base {
+export default class Occurrence extends BaseModel {
 	static tableName() { return TABLE_NAME }
 
 	constructor({ trackingId, occurrenceId, createdAt }) {
@@ -31,7 +31,7 @@ export default class Occurrence extends Base {
 	}
 
 	static async findAllForTracking({ trackingId }) {
-		const occurrences = await this.sql`SELECT occurrence_id, created_at FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId}`
+		const occurrences = await this.sql`SELECT occurrence_id, created_at FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId} ORDER BY created_at DESC`
 		return occurrences.map(occurrence => this.initFromDb({ ...occurrence, tracking_id: trackingId }))
 	}
 

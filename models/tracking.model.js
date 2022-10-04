@@ -1,4 +1,4 @@
-import Base from "./base.model.js"
+import BaseModel from "./base.model.js"
 import Occurrence from "./occurrence.model.js"
 
 export const TABLE_NAME = 'tracking'
@@ -9,7 +9,7 @@ export const TABLE_NAME = 'tracking'
 // name: string non null
 // last_occurrence_at: timestamp not null
 
-export default class Tracking extends Base {
+export default class Tracking extends BaseModel {
 	static tableName() { return TABLE_NAME }
 
 	constructor({ userId, trackingId, name, lastOccurrenceAt }) {
@@ -81,9 +81,8 @@ export default class Tracking extends Base {
 	static async track({ userId, trackingId }) {
 		const lastOccurrenceAt = await this.sql.begin(async sql => {
 			const [{ created_at }] = await sql`INSERT INTO ${sql(Occurrence.tableName())} (tracking_id) VALUES (${trackingId}) returning created_at`
-			console.log("here in track setting last_occurrence_at to", created_at)
-			const [{ last_occurrence_at }] = await sql`UPDATE ${sql(TABLE_NAME)} SET last_occurrence_at = ${created_at} WHERE user_id = ${userId} AND tracking_id = ${trackingId} returning last_occurrence_at`
-			console.log("and the date stored in sql:", last_occurrence_at)
+			await sql`UPDATE ${sql(TABLE_NAME)} SET last_occurrence_at = ${created_at} WHERE user_id = ${userId} AND tracking_id = ${trackingId}`
+
 			return created_at
 		})
 

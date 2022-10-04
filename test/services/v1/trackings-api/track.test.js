@@ -17,30 +17,25 @@ describe('trackings-track-v1', function () {
 		// first track
 		const response1 = await handler(event)
 		expect(response1.statusCode).to.equal(201)
-		const { lastOccurrenceAt: lastOccurrenceAt1 } = JSON.parse(response1.body)
+		const response1Body = JSON.parse(response1.body)
+		const lastOccurrenceAt1 = new Date(response1Body['lastOccurrenceAt'])
 
 		sleep(200)
 
 		// second track
 		const response2 = await handler(event)
 		expect(response2.statusCode).to.equal(201)
-		const { lastOccurrenceAt: lastOccurrenceAt2 } = JSON.parse(response2.body)
-
-		console.log("lastOccurrenceAt1:", lastOccurrenceAt1)
-		console.log("lastOccurrenceAt2:", lastOccurrenceAt2)
+		const response2Body = JSON.parse(response2.body)
+		const lastOccurrenceAt2 = new Date(response2Body['lastOccurrenceAt'])
 
 		// verify
 		const updatedTracking = await Tracking.findById(tracking.trackingId)
 		const occurrences = await Occurrence.findAllForTracking({ trackingId: tracking.trackingId })
 
-		console.log("updatedTracking.lastOccurrenceAt:", updatedTracking.lastOccurrenceAt)
-		console.log("updatedTracking.lastOccurrenceAt.toJSON():", updatedTracking.lastOccurrenceAt.toJSON())
-		console.log("occurrences map createdAt:", occurrences.map(o => o.createdAt))
-
-		expect(updatedTracking.lastOccurrenceAt.toJSON()).to.equal(lastOccurrenceAt2)
+		expect(updatedTracking.lastOccurrenceAt.toISOString()).to.equal(lastOccurrenceAt2.toISOString())
 		expect(occurrences.length).to.equal(2)
-		expect(occurrences[0].createdAt).to.equal(lastOccurrenceAt1)
-		expect(occurrences[1].createdAt).to.equal(lastOccurrenceAt2)
+		expect(occurrences[0].createdAt.toISOString()).to.equal(lastOccurrenceAt2.toISOString())
+		expect(occurrences[1].createdAt.toISOString()).to.equal(lastOccurrenceAt1.toISOString())
 	})
 
 	it('returns 404 when tracking does not exists', async () => {

@@ -21,7 +21,7 @@ export const handler = async (event) => {
 
 		return { statusCode: 201, body: JSON.stringify({ lastOccurrenceAt }) }
 	} catch (error) {
-		if (process.env.TRAKER_ENV !== 'tesst') {
+		if (process.env.TRAKER_ENV !== 'test') {
 			console.error("Error on trackings-track-v1:", error)
 		}
 

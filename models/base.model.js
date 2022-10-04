@@ -8,16 +8,16 @@ export const DATABASE_URL = process.env.TRAKER_ENV === 'test' ? process.env.TEST
 
 // we can declare thousands of these if we want, they only get executed when called and then will connection will die after 10 seconds
 const sql = postgres(DATABASE_URL, {
-	idle_timeout: DEFAULT_IDLE_TIME_FOR_DISCONNECT
+	idle_timeout: DEFAULT_IDLE_TIME_FOR_DISCONNECT,
 })
 
-class Base {
+class BaseModel {
 	static deleteAllRecords() {
 		return sql`DELETE FROM ${sql(this.tableName())}`
 	}
 }
 
 // literal hack
-Base.sql = sql
+BaseModel.sql = sql
 
-export default Base
+export default BaseModel
