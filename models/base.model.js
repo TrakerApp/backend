@@ -12,6 +12,10 @@ const sql = postgres(DATABASE_URL, {
 })
 
 class BaseModel {
+	static tableNameSql() {
+		return sql(this.tableName())
+	}
+
 	static deleteAllRecords() {
 		return sql`DELETE FROM ${sql(this.tableName())}`
 	}

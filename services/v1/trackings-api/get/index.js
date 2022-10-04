@@ -1,4 +1,6 @@
 import Tracking from "../../../../models/tracking.model.js"
+import Occurrence from "../../../../models/occurrence.model.js"
+import { isBlank } from "../../../../libs/validation.js"
 
 export const handler = async (event) => {
 	// userId is temporal until we have cognito implemented in app
@@ -21,23 +23,30 @@ export const handler = async (event) => {
 		const [data] = await Tracking.sql`
 			SELECT
 				name,
-				count(week_occurrences) as weekOccurrences,
-				count(today_occurrences) as todayOccurrences,
-				lastOccurenceAt
-			FROM trackings
-				INNER JOIN occurrences week_occurrences
-					ON week_occurrences.tracking_id = trackings.id
-					AND week_occurrences.created_at >= date_trunc('week', now())
-				INNER JOIN occurrences today_occurrences
-					ON today_occurrences.tracking_id = trackings.id
-					AND today_occurrences.created_at >= date_trunc('day', now())
-			WHERE trackings.id = ${trackingId}
-			GROUP BY trackings.id
+				(
+					SELECT COUNT(1)
+					FROM ${Occurrence.tableNameSql()}
+					WHERE tracking_id = ${trackingId}
+					AND created_at > NOW() - INTERVAL '1 week'
+				) as week_occurrences,
+				(
+					SELECT COUNT(1)
+					FROM ${Occurrence.tableNameSql()}
+					WHERE tracking_id = ${trackingId}
+					AND created_at > date_trunc('day', now())
+				) as today_occurrences,
+				last_occurrence_at
+			FROM ${Tracking.tableNameSql()}
+			WHERE tracking.tracking_id = ${trackingId}
+			GROUP BY tracking.tracking_id
 		`
 
-		console.log("data is", data)
-
-		return { statusCode: 201, body: JSON.stringify(data) }
+		return { statusCode: 201, body: JSON.stringify({
+			name: data.name,
+			weekOccurrences: parseInt(data.week_occurrences),
+			todayOccurrences: parseInt(data.today_occurrences),
+			lastOccurrenceAt: data.last_occurrence_at,
+		}) }
 	} catch (error) {
 		if (process.env.TRAKER_ENV !== 'test') {
 			console.error("Error on trackings-get-v1:", error)
