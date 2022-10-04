@@ -16,6 +16,7 @@
     "webpack": "^5.74.0"
   },
   "scripts": {
+    "console": "node console.js",
     "test": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive test --exit",
     "testf": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive --exit"
   }
