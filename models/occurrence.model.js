@@ -36,7 +36,7 @@ export default class Occurrence extends BaseModel {
 			LIMIT ${perPage} OFFSET ${(page-1) * perPage}
 		`
 
-		const response = occurrences.map(occurrence => this.initFromDb({ tracking_id: trackingId, ...occurrence }))
+		const response = occurrences.map(occurrence => this.initFromDb({ ...occurrence }))
 		response.totalHits = parseInt(total[0].count)
 
 		return response
