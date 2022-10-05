@@ -82,7 +82,7 @@ describe('trackings-occurrences-v1', function () {
 		expect(body.occurrences.length).to.equal(0)
 	})
 
-	it('returns 404 if trying to obtain the occurrences of a trackingId of another userId', async () => {
+	it('returns 404 if trying to obtain the occurrences of a trackingId of another userId or an unexistant trackingId', async () => {
 		const tracking1 = await Tracking.create({ userId: 'user1', name: 'tracking1' })
 		const tracking2 = await Tracking.create({ userId: 'user2', name: 'tracking2' })
 
@@ -93,9 +93,8 @@ describe('trackings-occurrences-v1', function () {
 
 		response = await handler({ ...baseParams, body: JSON.stringify({ userId: tracking2.userId }) })
 		expect(response.statusCode).to.equal(404)
-	})
 
-	it('returns 404 if the tracking does not exists', async () => {
-
+		response = await handler({ pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" }, body: JSON.stringify({ userId: tracking1.userId }) })
+		expect(response.statusCode).to.equal(404)
 	})
 })
