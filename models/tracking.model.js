@@ -62,7 +62,7 @@ export default class Tracking extends BaseModel {
 			LIMIT ${perPage} OFFSET ${(page-1) * perPage}
 		`
 
-		const response = trackings.map(tracking => this.initFromDb({ userId, ...tracking }))
+		const response = trackings.map(tracking => this.initFromDb({ user_id: userId, ...tracking }))
 		response.totalHits = parseInt(total[0].count)
 
 		return response

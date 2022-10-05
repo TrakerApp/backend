@@ -25,6 +25,23 @@ export default class Occurrence extends BaseModel {
 		})
 	}
 
+	static async findAllByTrackingId({ trackingId, page = 1, perPage = 10 }) {
+		const total = await this.sql`SELECT COUNT(*) FROM ${this.tableNameSql()} WHERE tracking_id = ${trackingId}`
+
+		const occurrences = await this.sql`
+			SELECT occurrence_id, created_at
+			FROM ${this.tableNameSql()}
+			WHERE tracking_id = ${trackingId}
+			ORDER BY created_at DESC
+			LIMIT ${perPage} OFFSET ${(page-1) * perPage}
+		`
+
+		const response = occurrences.map(occurrence => this.initFromDb({ tracking_id: trackingId, ...occurrence }))
+		response.totalHits = parseInt(total[0].count)
+
+		return response
+	}
+
 	static async create({ trackingId }) {
 		const occurrence = await this.sql`INSERT INTO ${this.sql(TABLE_NAME)} (tracking_id) VALUES (${trackingId}) RETURNING occurrence_id, created_at`
 		return this.initFromDb({ ...occurrence, tracking_id: trackingId })
