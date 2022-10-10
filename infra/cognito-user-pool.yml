@@ -16,16 +16,16 @@ Resources:
         PasswordPolicy:
           MinimumLength: 6
       AutoVerifiedAttributes: ["email"]
-      ExplicitAuthFlows:
-        - ALLOW_USER_PASSWORD_AUTH
-        - ALLOW_REFRESH_TOKEN_AUTH
-        - ALLOW_USER_SRP_AUTH
-        - ALLOW_ADMIN_USER_PASSWORD_AUTH
   UserClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       ClientName: trakerapp-infra-${self:provider.stage}-user-pool-client
       GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
       UserPoolId:
         Ref: UserPool
   # ApiGatewayAuthorizer:
