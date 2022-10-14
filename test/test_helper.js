@@ -23,8 +23,11 @@ const sleep = (ms) => {
 	})
 }
 
+const generateRequestContext = (userId) => { return { requestContext: { authorizer: { jwt: { claims: { sub: userId } } } } } }
+
 export {
 	cleanAllModels,
 	sleep,
 	chai, expect,
+	generateRequestContext,
 }

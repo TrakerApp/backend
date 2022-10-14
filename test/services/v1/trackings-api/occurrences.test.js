@@ -1,4 +1,4 @@
-import { expect, cleanAllModels } from "../../../test_helper.js"
+import { expect, cleanAllModels, generateRequestContext } from "../../../test_helper.js"
 import Tracking from "../../../../models/tracking.model.js"
 import Occurrence from "../../../../models/occurrence.model.js"
 import { handler } from "../../../../services/v1/trackings-api/occurrences/index.js"
@@ -13,7 +13,8 @@ describe('trackings-occurrences-v1', function () {
 		await Tracking.track({ userId, trackingId })
 
 		let event = {
-			body: JSON.stringify({ userId }),
+			...generateRequestContext(userId),
+			body: '{}',
 			pathParameters: { trackingId }
 		}
 		let response = await handler(event)
@@ -44,7 +45,8 @@ describe('trackings-occurrences-v1', function () {
 
 		// by default: 10 results per page
 		let event = {
-			body: JSON.stringify({ userId }),
+			...generateRequestContext(userId),
+			body: '{}',
 			pathParameters: { trackingId }
 		}
 		let response = await handler(event)
@@ -57,7 +59,8 @@ describe('trackings-occurrences-v1', function () {
 
 		// page 1, perPage 5
 		event = {
-			body: JSON.stringify({ userId, page: 1, perPage: 5 }),
+			...generateRequestContext(userId),
+			body: JSON.stringify({ page: 1, perPage: 5 }),
 			pathParameters: { trackingId }
 		}
 		response = await handler(event)
@@ -70,7 +73,8 @@ describe('trackings-occurrences-v1', function () {
 
 		// page 3, perPage 6
 		event = {
-			body: JSON.stringify({ userId, page: 3, perPage: 6 }),
+			...generateRequestContext(userId),
+			body: JSON.stringify({ page: 3, perPage: 6 }),
 			pathParameters: { trackingId }
 		}
 		response = await handler(event)
@@ -88,13 +92,13 @@ describe('trackings-occurrences-v1', function () {
 
 		const baseParams = { pathParameters: { trackingId: tracking1.trackingId } }
 
-		let response = await handler({ ...baseParams, body: JSON.stringify({ userId: tracking1.userId }) })
+		let response = await handler({ ...baseParams, ...generateRequestContext(tracking1.userId), body: '{}' })
 		expect(response.statusCode).to.equal(200)
 
-		response = await handler({ ...baseParams, body: JSON.stringify({ userId: tracking2.userId }) })
+		response = await handler({ ...generateRequestContext(tracking2.userId), ...baseParams, body: '{}' })
 		expect(response.statusCode).to.equal(404)
 
-		response = await handler({ pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" }, body: JSON.stringify({ userId: tracking1.userId }) })
+		response = await handler({ ...generateRequestContext(tracking1.userId), pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" }, body: '{}' })
 		expect(response.statusCode).to.equal(404)
 	})
 })

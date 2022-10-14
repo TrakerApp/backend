@@ -1,4 +1,4 @@
-import { expect, cleanAllModels, sleep } from "../../../test_helper.js"
+import { expect, cleanAllModels, sleep, generateRequestContext } from "../../../test_helper.js"
 import Tracking from "../../../../models/tracking.model.js"
 import Occurrence from "../../../../models/occurrence.model.js"
 import { handler } from "../../../../services/v1/trackings-api/track/index.js"
@@ -10,7 +10,8 @@ describe('trackings-track-v1', function () {
 		const tracking = await Tracking.create({ name: 'test', userId: 'test' })
 
 		const event = {
-			body: JSON.stringify({ userId: 'test' }),
+			...generateRequestContext('test'),
+			body: '{}',
 			pathParameters: { trackingId: tracking.trackingId }
 		}
 
@@ -42,7 +43,8 @@ describe('trackings-track-v1', function () {
 		await Tracking.create({ userId: "1234", name: "test-tracking" })
 
 		const event = {
-			body: JSON.stringify({ userId: "1234" }),
+			...generateRequestContext('1234'),
+			body: '{}',
 			pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" }
 		}
 

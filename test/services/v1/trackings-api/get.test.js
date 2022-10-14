@@ -1,4 +1,4 @@
-import { expect, cleanAllModels, sleep } from "../../../test_helper.js"
+import { expect, cleanAllModels, generateRequestContext } from "../../../test_helper.js"
 import Tracking from "../../../../models/tracking.model.js"
 import Occurrence from "../../../../models/occurrence.model.js"
 import { handler } from "../../../../services/v1/trackings-api/get/index.js"
@@ -8,14 +8,16 @@ describe('trackings-get-v1', function () {
 
 	it('gets tracking information', async () => {
 		// create tracking and occurrences
-		const tracking = await Tracking.create({ name: 'test', userId: 'test' })
-		await Tracking.track({ trackingId: tracking.trackingId, userId: 'test' })
-		await Tracking.track({ trackingId: tracking.trackingId, userId: 'test' })
+		const userId = 'test'
+		const tracking = await Tracking.create({ name: 'test', userId: userId })
+		await Tracking.track({ trackingId: tracking.trackingId, userId: userId })
+		await Tracking.track({ trackingId: tracking.trackingId, userId: userId })
 		const occurrences = await Occurrence.findAllForTracking({ trackingId: tracking.trackingId })
 		const lastOccurrenceDate = occurrences[0].createdAt
 
 		const event = {
-			body: JSON.stringify({ userId: 'test' }),
+			...generateRequestContext(userId),
+			body: '{}',
 			pathParameters: { trackingId: tracking.trackingId }
 		}
 
