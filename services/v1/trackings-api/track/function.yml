@@ -5,3 +5,5 @@ trackings-track-v1:
     - httpApi:
         method: POST
         path: /api/v1/trackings/{trackingId}/track
+        authorizer:
+          name: userAuthorizer

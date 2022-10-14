@@ -5,3 +5,5 @@ trackings-list-v1:
     - httpApi:
         method: GET
         path: /api/v1/trackings
+        authorizer:
+          name: userAuthorizer

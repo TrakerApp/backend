@@ -1,9 +1,11 @@
 import Tracking from "../../../../models/tracking.model.js"
 import { isBlank } from "../../../../libs/validation.js"
+import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
 	// userId is temporal until we have cognito implemented in app
-	const { userId, name } = JSON.parse(event.body);
+	const { name } = JSON.parse(event.body);
+	const userId = getUserId(event);
 
 	if (isBlank(userId) || isBlank(name)) {
 		return { statusCode: 400, body: JSON.stringify({ error: 'required attributes: userId, name' }) }

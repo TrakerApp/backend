@@ -5,3 +5,5 @@ trackings-create-v1:
     - httpApi:
         method: POST
         path: /api/v1/trackings
+        authorizer:
+          name: userAuthorizer

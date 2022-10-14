@@ -5,3 +5,5 @@ trackings-occurrences-v1:
     - httpApi:
         method: GET
         path: /api/v1/trackings/{trackingId}/occurrences
+        authorizer:
+          name: userAuthorizer

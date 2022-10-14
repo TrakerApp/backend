@@ -16,6 +16,8 @@ Resources:
         PasswordPolicy:
           MinimumLength: 6
       AutoVerifiedAttributes: ["email"]
+      UsernameAttributes:
+        - email
   UserClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
@@ -26,6 +28,8 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
         - ALLOW_ADMIN_USER_PASSWORD_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
       UserPoolId:
         Ref: UserPool
   # ApiGatewayAuthorizer:

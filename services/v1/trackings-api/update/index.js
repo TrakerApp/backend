@@ -1,8 +1,10 @@
 import Tracking from "../../../../models/tracking.model.js"
 import { isBlank } from "../../../../libs/validation.js"
+import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
-	const { userId, name } = JSON.parse(event.body); // temporal until we have cognito implemented in app
+	const userId = getUserId(event);
+	const { name } = JSON.parse(event.body); // temporal until we have cognito implemented in app
 	const { trackingId } = event.pathParameters;
 
 	if (isBlank(trackingId) || isBlank(name) || isBlank(userId)) {

@@ -2,13 +2,13 @@ useDotenv: true
 
 service: trakerapp
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 custom:
   webpack:
-    webpackConfig: 'webpack.config.cjs' # Name of webpack configuration file
+    webpackConfig: "webpack.config.cjs" # Name of webpack configuration file
     # includeModules: false
-    packager: 'yarn' # Packager that will be used to package your external modules
+    packager: "yarn" # Packager that will be used to package your external modules
     excludeFiles: services/**/*.test.js # Provide a glob for files to ignore
 
 provider:
@@ -34,7 +34,13 @@ provider:
     LAMBDA_EXECUTION_ROLE_NAME_ARN: "arn:aws:iam::${aws:accountId}:role/${self:provider.environment.LAMBDA_EXECUTION_ROLE_NAME}"
   httpApi:
     cors: true
-
+    authorizers:
+      userAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.${self:provider.region}.amazonaws.com/${env:COGNITO_POOL_ID}
+        audience:
+          - ${env:COGNITO_CLIENT_ID}
 plugins:
   - serverless-webpack
 

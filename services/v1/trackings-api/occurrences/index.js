@@ -1,8 +1,10 @@
 import Occurrence from "../../../../models/occurrence.model.js";
 import Tracking from "../../../../models/tracking.model.js";
+import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
-	const { userId, page, perPage } = JSON.parse(event.body);
+	const userId = getUserId(event);
+	const { page, perPage } = JSON.parse(event.body);
 	const { trackingId } = event.pathParameters;
 
 	const trackingExists = await Tracking.exists({ userId, trackingId })

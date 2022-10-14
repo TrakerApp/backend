@@ -5,3 +5,5 @@ trackings-update-v1:
     - httpApi:
         method: PUT
         path: /api/v1/trackings/{trackingId}
+        authorizer:
+          name: userAuthorizer

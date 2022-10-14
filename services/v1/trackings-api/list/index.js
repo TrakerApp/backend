@@ -1,7 +1,9 @@
 import Tracking from "../../../../models/tracking.model.js"
+import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
-	const { userId, page, perPage } = JSON.parse(event.body); //  temporal until we have cognito implemented in app
+	const userId = getUserId(event);
+	const { page, perPage } = JSON.parse(event.body); //  temporal until we have cognito implemented in app
 
 	const trackings = await Tracking.findAll({ userId, page, perPage });
 

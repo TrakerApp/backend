@@ -1,10 +1,11 @@
 import Tracking from "../../../../models/tracking.model.js"
 import Occurrence from "../../../../models/occurrence.model.js"
 import { isBlank } from "../../../../libs/validation.js"
+import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
 	// userId is temporal until we have cognito implemented in app
-	const { userId } = JSON.parse(event.body);
+	const userId = getUserId(event);
 	const { trackingId } = event.pathParameters;
 
 	/*
@@ -41,12 +42,14 @@ export const handler = async (event) => {
 			GROUP BY tracking.tracking_id
 		`
 
-		return { statusCode: 201, body: JSON.stringify({
-			name: data.name,
-			weekOccurrences: parseInt(data.week_occurrences),
-			todayOccurrences: parseInt(data.today_occurrences),
-			lastOccurrenceAt: data.last_occurrence_at,
-		}) }
+		return {
+			statusCode: 201, body: JSON.stringify({
+				name: data.name,
+				weekOccurrences: parseInt(data.week_occurrences),
+				todayOccurrences: parseInt(data.today_occurrences),
+				lastOccurrenceAt: data.last_occurrence_at,
+			})
+		}
 	} catch (error) {
 		if (process.env.TRAKER_ENV !== 'test') {
 			console.error("Error on trackings-get-v1:", error)
