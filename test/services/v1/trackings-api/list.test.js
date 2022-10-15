@@ -36,7 +36,7 @@ describe('trackings-list-v1', function () {
 		await Tracking.create({ userId: userId, name: 'tracking5' })
 		await Tracking.create({ userId: userId, name: 'tracking6' })
 
-		let response = await handler({ ...generateRequestContext(userId), body: JSON.stringify({ page: 1, perPage: 2 }) })
+		let response = await handler({ ...generateRequestContext(userId), queryStringParameters: { page: 1, perPage: 2 } })
 		expect(response.statusCode).to.equal(200)
 		let body = JSON.parse(response.body)
 		expect(body.totalHits).to.equal(6)
@@ -47,7 +47,7 @@ describe('trackings-list-v1', function () {
 		expect(body.trackings[0].name).to.eq('tracking1')
 		expect(body.trackings[1].name).to.eq('tracking2')
 
-		response = await handler({ ...generateRequestContext(userId), body: JSON.stringify({ page: 2, perPage: 3 }) })
+		response = await handler({ ...generateRequestContext(userId), queryStringParameters: { page: 2, perPage: 3 } })
 		expect(response.statusCode).to.equal(200)
 		body = JSON.parse(response.body)
 		expect(body.totalHits).to.equal(6)

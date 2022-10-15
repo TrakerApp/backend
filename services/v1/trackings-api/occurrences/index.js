@@ -4,7 +4,9 @@ import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
 	const userId = getUserId(event);
-	const { page, perPage } = JSON.parse(event.body);
+	const page = event.queryStringParameters?.page || 1;
+	const perPage = event.queryStringParameters?.perPage || 10;
+
 	const { trackingId } = event.pathParameters;
 
 	const trackingExists = await Tracking.exists({ userId, trackingId })

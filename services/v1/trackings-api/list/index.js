@@ -3,7 +3,8 @@ import { getUserId } from "../../../../libs/getUserId.js";
 
 export const handler = async (event) => {
 	const userId = getUserId(event);
-	const { page, perPage } = JSON.parse(event.body); //  temporal until we have cognito implemented in app
+	const page = event.queryStringParameters?.page || 1;
+	const perPage = event.queryStringParameters?.perPage || 10;
 
 	const trackings = await Tracking.findAll({ userId, page, perPage });
 

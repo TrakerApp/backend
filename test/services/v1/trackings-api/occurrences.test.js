@@ -14,7 +14,6 @@ describe('trackings-occurrences-v1', function () {
 
 		let event = {
 			...generateRequestContext(userId),
-			body: '{}',
 			pathParameters: { trackingId }
 		}
 		let response = await handler(event)
@@ -46,7 +45,6 @@ describe('trackings-occurrences-v1', function () {
 		// by default: 10 results per page
 		let event = {
 			...generateRequestContext(userId),
-			body: '{}',
 			pathParameters: { trackingId }
 		}
 		let response = await handler(event)
@@ -60,7 +58,7 @@ describe('trackings-occurrences-v1', function () {
 		// page 1, perPage 5
 		event = {
 			...generateRequestContext(userId),
-			body: JSON.stringify({ page: 1, perPage: 5 }),
+			queryStringParameters: { page: 1, perPage: 5 },
 			pathParameters: { trackingId }
 		}
 		response = await handler(event)
@@ -74,7 +72,7 @@ describe('trackings-occurrences-v1', function () {
 		// page 3, perPage 6
 		event = {
 			...generateRequestContext(userId),
-			body: JSON.stringify({ page: 3, perPage: 6 }),
+			queryStringParameters: { page: 3, perPage: 6 },
 			pathParameters: { trackingId }
 		}
 		response = await handler(event)
@@ -92,13 +90,13 @@ describe('trackings-occurrences-v1', function () {
 
 		const baseParams = { pathParameters: { trackingId: tracking1.trackingId } }
 
-		let response = await handler({ ...baseParams, ...generateRequestContext(tracking1.userId), body: '{}' })
+		let response = await handler({ ...baseParams, ...generateRequestContext(tracking1.userId) })
 		expect(response.statusCode).to.equal(200)
 
-		response = await handler({ ...generateRequestContext(tracking2.userId), ...baseParams, body: '{}' })
+		response = await handler({ ...generateRequestContext(tracking2.userId), ...baseParams })
 		expect(response.statusCode).to.equal(404)
 
-		response = await handler({ ...generateRequestContext(tracking1.userId), pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" }, body: '{}' })
+		response = await handler({ ...generateRequestContext(tracking1.userId), pathParameters: { trackingId: "4299d1c2-a7bb-4e42-8778-e40a280fe015" } })
 		expect(response.statusCode).to.equal(404)
 	})
 })
