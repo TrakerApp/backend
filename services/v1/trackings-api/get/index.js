@@ -43,7 +43,7 @@ export const handler = async (event) => {
 		`
 
 		return {
-			statusCode: 201, body: JSON.stringify({
+			statusCode: 200, body: JSON.stringify({
 				name: data.name,
 				weekOccurrences: parseInt(data.week_occurrences),
 				todayOccurrences: parseInt(data.today_occurrences),

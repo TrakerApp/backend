@@ -25,7 +25,7 @@ describe('trackings-get-v1', function () {
 		const response = await handler(event)
 		const { name, weekOccurrences, todayOccurrences, lastOccurrenceAt } = JSON.parse(response.body)
 
-		expect(response.statusCode).to.equal(201)
+		expect(response.statusCode).to.equal(200)
 		expect(name).to.eq('test')
 		expect(weekOccurrences).to.eq(2)
 		expect(todayOccurrences).to.eq(2)
