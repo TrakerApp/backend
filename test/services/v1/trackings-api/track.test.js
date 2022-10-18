@@ -19,7 +19,7 @@ describe('trackings-track-v1', function () {
 		const response1 = await handler(event)
 		expect(response1.statusCode).to.equal(201)
 		const response1Body = JSON.parse(response1.body)
-		const lastOccurrenceAt1 = new Date(response1Body['lastOccurrenceAt'])
+		const occurrence1 = { occurrenceId: response1Body.occurrenceId, createdAt: new Date(response1Body.createdAt) }
 
 		sleep(200)
 
@@ -27,16 +27,18 @@ describe('trackings-track-v1', function () {
 		const response2 = await handler(event)
 		expect(response2.statusCode).to.equal(201)
 		const response2Body = JSON.parse(response2.body)
-		const lastOccurrenceAt2 = new Date(response2Body['lastOccurrenceAt'])
+		const occurrence2 = { occurrenceId: response2Body.occurrenceId, createdAt: new Date(response2Body.createdAt) }
 
 		// verify
 		const updatedTracking = await Tracking.findById(tracking.trackingId)
 		const occurrences = await Occurrence.findAllForTracking({ trackingId: tracking.trackingId })
 
-		expect(updatedTracking.lastOccurrenceAt.toISOString()).to.equal(lastOccurrenceAt2.toISOString())
+		expect(updatedTracking.lastOccurrenceAt.toISOString()).to.equal(occurrence2.createdAt.toISOString())
 		expect(occurrences.length).to.equal(2)
-		expect(occurrences[0].createdAt.toISOString()).to.equal(lastOccurrenceAt2.toISOString())
-		expect(occurrences[1].createdAt.toISOString()).to.equal(lastOccurrenceAt1.toISOString())
+		expect(occurrences[0].occurrenceId).to.equal(occurrence2.occurrenceId)
+		expect(occurrences[0].createdAt.toISOString()).to.equal(occurrence2.createdAt.toISOString())
+		expect(occurrences[1].occurrenceId).to.equal(occurrence1.occurrenceId)
+		expect(occurrences[1].createdAt.toISOString()).to.equal(occurrence1.createdAt.toISOString())
 	})
 
 	it('returns 404 when tracking does not exists', async () => {

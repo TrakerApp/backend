@@ -79,13 +79,13 @@ export default class Tracking extends BaseModel {
 	// NOTE: THIS METHOD ASSUMES THAT TRACKINGID IS VALID AND EXISTS
 	// VALIDATE ON CONTROLLER/ACTION BEFORE USING
 	static async track({ userId, trackingId }) {
-		const lastOccurrenceAt = await this.sql.begin(async sql => {
-			const [{ created_at }] = await sql`INSERT INTO ${sql(Occurrence.tableName())} (tracking_id) VALUES (${trackingId}) returning created_at`
+		const [occurrenceId, createdAt] = await this.sql.begin(async sql => {
+			const [{ occurrence_id, created_at }] = await sql`INSERT INTO ${Occurrence.tableNameSql()} (tracking_id) VALUES (${trackingId}) returning occurrence_id, created_at`
 			await sql`UPDATE ${sql(TABLE_NAME)} SET last_occurrence_at = ${created_at} WHERE user_id = ${userId} AND tracking_id = ${trackingId}`
 
-			return created_at
+			return [occurrence_id, created_at]
 		})
 
-		return lastOccurrenceAt
+		return { occurrenceId, createdAt }
 	}
 }

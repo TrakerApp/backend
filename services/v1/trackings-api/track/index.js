@@ -18,9 +18,9 @@ export const handler = async (event) => {
 			return { statusCode: 404, body: JSON.stringify({ error: 'tracking not found' }) }
 		}
 
-		const lastOccurrenceAt = await Tracking.track({ userId, trackingId });
+		const { occurrenceId, createdAt } = await Tracking.track({ userId, trackingId });
 
-		return { statusCode: 201, body: JSON.stringify({ lastOccurrenceAt }) }
+		return { statusCode: 201, body: JSON.stringify({ occurrenceId, createdAt }) }
 	} catch (error) {
 		if (process.env.TRAKER_ENV !== 'test') {
 			console.error("Error on trackings-track-v1:", error)
