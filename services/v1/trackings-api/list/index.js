@@ -15,6 +15,7 @@ export const handler = async (event) => {
 			total: trackings.length,
 			page: page,
 			perPage: perPage,
+			totalPages: Math.ceil(trackings.totalHits / perPage),
 			trackings: trackings
 		}),
 	}

@@ -53,6 +53,7 @@ describe('trackings-occurrences-v1', function () {
 		let body = JSON.parse(response.body)
 		expect(body.totalHits).to.equal(11)
 		expect(body.total).to.equal(10)
+		expect(body.totalPages).to.equal(2)
 		expect(body.occurrences.length).to.equal(10)
 
 		// page 1, perPage 5
@@ -67,6 +68,7 @@ describe('trackings-occurrences-v1', function () {
 		body = JSON.parse(response.body)
 		expect(body.totalHits).to.equal(11)
 		expect(body.total).to.equal(5)
+		expect(body.totalPages).to.equal(3)
 		expect(body.occurrences.length).to.equal(5)
 
 		// page 3, perPage 6
@@ -81,6 +83,7 @@ describe('trackings-occurrences-v1', function () {
 		body = JSON.parse(response.body)
 		expect(body.totalHits).to.equal(11)
 		expect(body.total).to.equal(0)
+		expect(body.totalPages).to.equal(2)
 		expect(body.occurrences.length).to.equal(0)
 	})
 

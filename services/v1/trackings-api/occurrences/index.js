@@ -24,6 +24,7 @@ export const handler = async (event) => {
 			total: occurrences.length,
 			page: page,
 			perPage: perPage,
+			totalPages: Math.ceil(occurrences.totalHits / perPage),
 			occurrences: occurrences
 		}),
 	}
