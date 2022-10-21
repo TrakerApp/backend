@@ -12,6 +12,10 @@ Resources:
         - Name: name
           Required: false
           Mutable: true
+        - Name: plan_name
+          AttributeDataType: String
+          Required: false
+          Mutable: true
       Policies:
         PasswordPolicy:
           MinimumLength: 6
