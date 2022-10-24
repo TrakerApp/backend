@@ -43,12 +43,12 @@ export default class Occurrence extends BaseModel {
 	}
 
 	static async create({ trackingId }) {
-		const occurrence = await this.sql`INSERT INTO ${this.sql(TABLE_NAME)} (tracking_id) VALUES (${trackingId}) RETURNING occurrence_id, created_at`
+		const occurrence = await this.sql`INSERT INTO ${this.tableNameSql()} (tracking_id) VALUES (${trackingId}) RETURNING occurrence_id, created_at`
 		return this.initFromDb({ ...occurrence, tracking_id: trackingId })
 	}
 
 	static async findAllForTracking({ trackingId }) {
-		const occurrences = await this.sql`SELECT occurrence_id, created_at FROM ${this.sql(TABLE_NAME)} WHERE tracking_id = ${trackingId} ORDER BY created_at DESC`
+		const occurrences = await this.sql`SELECT occurrence_id, created_at FROM ${this.tableNameSql()} WHERE tracking_id = ${trackingId} ORDER BY created_at DESC`
 		return occurrences.map(occurrence => this.initFromDb({ ...occurrence, tracking_id: trackingId }))
 	}
 
@@ -58,6 +58,15 @@ export default class Occurrence extends BaseModel {
 	}
 
 	static async delete({ occurrenceId }) {
-		return await this.sql`DELETE FROM ${this.sql(TABLE_NAME)} WHERE occurrence_id = ${occurrenceId}`
+		return await this.sql`DELETE FROM ${this.tableNameSql()} WHERE occurrence_id = ${occurrenceId}`
+	}
+
+	static async deleteAll({ trackingId }) {
+		return await this.sql`DELETE FROM ${this.tableNameSql()} WHERE tracking_id = ${trackingId}`
+	}
+
+	static async countByTrackingid({ trackingId }) {
+		const [count] = await this.sql`SELECT COUNT(*) FROM ${this.tableNameSql()} WHERE tracking_id = ${trackingId}`
+		return parseInt(count.count)
 	}
 }
