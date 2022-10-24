@@ -17,6 +17,7 @@
   },
   "scripts": {
     "console": "node console.js",
+    "setup": "NODE_ENV=test TRAKER_ENV=test node migrations/20221001-1-create-tables.js",
     "test": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive test --exit",
     "testf": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive --exit"
   }

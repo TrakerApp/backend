@@ -27,22 +27,40 @@ describe('trackings-remove-occurrence-v1', function () {
 
 	it('updates the tracking lastOccurrenceAt', async () => {
 		const { userId, trackingId } = await Tracking.create({ userId: 'user1', name: 'tracking1' })
-		const { occurrenceId } = await Tracking.track({ userId, trackingId })
+		const occurrence1 = await Tracking.track({ userId, trackingId })
+		const occurrence2 = await Tracking.track({ userId, trackingId })
+
+		expect(await Occurrence.exists({ trackingId, occurrenceId: occurrence1.occurrenceId })).to.eq(true)
+		expect(await Occurrence.exists({ trackingId, occurrenceId: occurrence2.occurrenceId })).to.eq(true)
 
 		let tracking = await Tracking.findById(trackingId)
-		expect(tracking.lastOccurrenceAt).to.not.be.null
+		expect(tracking.lastOccurrenceAt.toISOString()).to.eq(occurrence2.createdAt.toISOString())
 
+		// should be occurrence1 date
 		let event = {
 			...generateRequestContext(userId),
-			pathParameters: { trackingId, occurrenceId }
+			pathParameters: { trackingId, occurrenceId: occurrence2.occurrenceId }
 		}
 		let response = await handler(event)
 
 		expect(response.statusCode).to.equal(204)
 
-		expect(await Occurrence.exists({ trackingId, occurrenceId })).to.eq(false)
+		expect(await Occurrence.exists({ trackingId, occurrenceId: occurrence2.occurrenceId })).to.eq(false)
 		tracking = await Tracking.findById(trackingId)
-		expect(tracking.lastOccurrenceAt).to.be.null
+		expect(tracking.lastOccurrenceAt.toISOString()).to.eq(occurrence1.createdAt.toISOString())
+
+		// should be null
+		event = {
+			...generateRequestContext(userId),
+			pathParameters: { trackingId, occurrenceId: occurrence1.occurrenceId }
+		}
+		response = await handler(event)
+
+		expect(response.statusCode).to.equal(204)
+
+		expect(await Occurrence.exists({ trackingId, occurrenceId: occurrence1.occurrenceId })).to.eq(false)
+		tracking = await Tracking.findById(trackingId)
+		expect(tracking.lastOccurrenceAt).to.eq(null)
 	})
 
 	it('returns error when invalid user id, trackign id or occurrence id provided', async () => {
