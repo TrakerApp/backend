@@ -53,5 +53,6 @@ functions:
   - ${file(services/v1/trackings-api/get/function.yml)}
   - ${file(services/v1/trackings-api/list/function.yml)}
   - ${file(services/v1/trackings-api/occurrences/function.yml)}
+  - ${file(services/v1/trackings-api/remove-occurrence/function.yml)}
   - ${file(services/v1/trackings-api/track/function.yml)}
   - ${file(services/v1/trackings-api/update/function.yml)}

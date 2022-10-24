@@ -1,6 +1,5 @@
 // ALWAYS USE ID TOKEN IN FRONT FOR CALLS TO BACKEND
 export function getUserId(event) {
-	console.log("CLAIMS:", event.requestContext?.authorizer?.jwt?.claims)
 	return event.requestContext?.authorizer?.jwt?.claims?.sub
 }
 

@@ -52,6 +52,11 @@ export default class Occurrence extends BaseModel {
 		return occurrences.map(occurrence => this.initFromDb({ ...occurrence, tracking_id: trackingId }))
 	}
 
+	static async exists({ trackingId, occurrenceId }) {
+		const [occurrence] = await this.sql`SELECT 1 FROM ${this.tableNameSql()} WHERE tracking_id = ${trackingId} AND occurrence_id = ${occurrenceId}`
+		return !!occurrence
+	}
+
 	static async delete({ occurrenceId }) {
 		return await this.sql`DELETE FROM ${this.sql(TABLE_NAME)} WHERE occurrence_id = ${occurrenceId}`
 	}
