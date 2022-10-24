@@ -77,8 +77,8 @@ export default class Tracking extends BaseModel {
 	}
 
 	static async setLastOccurrenceAt({ userId, trackingId }) {
-		const [{ last_occurrence_at }] = await this.sql`SELECT MAX(created_at) FROM ${Occurrence.tableNameSql()} WHERE tracking_id = ${trackingId}`
-		const newDate = last_occurrence_at || null
+		const [{ created_at }] = await this.sql`SELECT MAX(created_at) FROM ${Occurrence.tableNameSql()} WHERE tracking_id = ${trackingId}`
+		const newDate = created_at || null
 		await this.sql`UPDATE ${this.tableNameSql()} SET last_occurrence_at = ${newDate} WHERE user_id = ${userId} AND tracking_id = ${trackingId}`
 	}
 
