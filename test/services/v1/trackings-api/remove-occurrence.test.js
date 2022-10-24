@@ -25,6 +25,26 @@ describe('trackings-remove-occurrence-v1', function () {
 		expect(await Occurrence.exists({ trackingId, occurrenceId })).to.eq(false)
 	})
 
+	it('updates the tracking lastOccurrenceAt', async () => {
+		const { userId, trackingId } = await Tracking.create({ userId: 'user1', name: 'tracking1' })
+		const { occurrenceId } = await Tracking.track({ userId, trackingId })
+
+		let tracking = await Tracking.findById(trackingId)
+		expect(tracking.lastOccurrenceAt).to.not.be.null
+
+		let event = {
+			...generateRequestContext(userId),
+			pathParameters: { trackingId, occurrenceId }
+		}
+		let response = await handler(event)
+
+		expect(response.statusCode).to.equal(204)
+
+		expect(await Occurrence.exists({ trackingId, occurrenceId })).to.eq(false)
+		tracking = await Tracking.findById(trackingId)
+		expect(tracking.lastOccurrenceAt).to.be.null
+	})
+
 	it('returns error when invalid user id, trackign id or occurrence id provided', async () => {
 		const { userId, trackingId } = await Tracking.create({ userId: 'user1', name: 'tracking1' })
 		const { occurrenceId } = await Tracking.track({ userId, trackingId })

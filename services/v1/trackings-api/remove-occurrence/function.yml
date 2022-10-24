@@ -1,6 +1,6 @@
 trackings-remove-occurrence-v1:
   role: ${self:provider.environment.LAMBDA_EXECUTION_ROLE_NAME_ARN}
-  handler: services/v1/trackings-api/remove-occurrences/index.handler
+  handler: services/v1/trackings-api/remove-occurrence/index.handler
   events:
     - httpApi:
         method: DELETE

@@ -20,6 +20,7 @@ export const handler = async (event) => {
 	}
 
 	await Occurrence.delete({ occurrenceId })
+	await Tracking.setLastOccurrenceAt({ userId, trackingId })
 
 	return {
 		statusCode: 204
