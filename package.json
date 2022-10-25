@@ -17,6 +17,11 @@
   },
   "scripts": {
     "console": "node console.js",
+    "deploy-dev": "NODE_ENV=dev TRAKER_ENV=dev serverless deploy --stage dev",
+    "deploy-prod": "NODE_ENV=production TRAKER_ENV=production serverless deploy --stage production",
+    "migrate-dev": "NODE_ENV=dev TRAKER_ENV=dev node migrations/20221001-1-create-tables.js",
+    "migrate-test": "NODE_ENV=test TRAKER_ENV=test node migrations/20221001-1-create-tables.js",
+    "migrate-prod": "NODE_ENV=production TRAKER_ENV=production node migrations/20221001-1-create-tables.js",
     "setup": "NODE_ENV=test TRAKER_ENV=test node migrations/20221001-1-create-tables.js",
     "test": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive test --exit",
     "testf": "NODE_ENV=test TRAKER_ENV=test mocha --timeout 20000 --recursive --exit"
