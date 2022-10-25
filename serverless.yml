@@ -4,13 +4,6 @@ service: trakerapp
 
 frameworkVersion: "3"
 
-custom:
-  webpack:
-    webpackConfig: "webpack.config.cjs" # Name of webpack configuration file
-    # includeModules: false
-    packager: "yarn" # Packager that will be used to package your external modules
-    excludeFiles: services/**/*.test.js # Provide a glob for files to ignore
-
 provider:
   name: aws
   runtime: nodejs16.x
@@ -41,8 +34,25 @@ provider:
         issuerUrl: https://cognito-idp.${self:provider.region}.amazonaws.com/${env:COGNITO_POOL_ID}
         audience:
           - ${env:COGNITO_CLIENT_ID}
+
+custom:
+  webpack:
+    webpackConfig: "webpack.config.cjs" # Name of webpack configuration file
+    # includeModules: false
+    packager: "yarn" # Packager that will be used to package your external modules
+    excludeFiles: services/**/*.test.js # Provide a glob for files to ignore
+  customDomain:
+    domainName: ${env:DOMAIN_NAME}
+    certificateName: ${env:CERTIFICATE_NAME}
+    createRoute53Record: true
+    createRoute53IPv6Record: true
+    endpointType: REGIONAL
+    apiType: http
+    # autoDomain: false
+
 plugins:
   - serverless-webpack
+  - serverless-domain-manager
 
 package:
   individually: true
