@@ -16,6 +16,10 @@ Resources:
           AttributeDataType: String
           Required: false
           Mutable: true
+        - Name: accepts_tos
+          AttributeDataType: Boolean
+          Required: false
+          Mutable: true
       Policies:
         PasswordPolicy:
           MinimumLength: 6
